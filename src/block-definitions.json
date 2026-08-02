@@ -1,0 +1,58 @@
+{
+  "extensionName": "Diagnostic Overlay",
+  "blocks": [
+    {
+      "opcode": "showDiagnostic",
+      "blockType": "COMMAND",
+      "text": "show [SEVERITY] diagnostic [CODE]: [MESSAGE]",
+      "description": "Displays a simple diagnostic on the TurboWarp stage.",
+      "arguments": {
+        "SEVERITY": {"type": "STRING", "defaultValue": "error", "menu": "severityMenu"},
+        "CODE": {"type": "STRING", "defaultValue": "APP001"},
+        "MESSAGE": {"type": "STRING", "defaultValue": "Something went wrong."}
+      }
+    },
+    {
+      "opcode": "showDiagnosticJson",
+      "blockType": "COMMAND",
+      "text": "show diagnostic JSON [DIAGNOSTIC]",
+      "description": "Validates and displays one structured diagnostic JSON object.",
+      "arguments": {
+        "DIAGNOSTIC": {"type": "STRING", "defaultValue": "{\"severity\":\"error\",\"code\":\"APP001\",\"message\":\"Something went wrong.\"}"}
+      }
+    },
+    {
+      "opcode": "clearDiagnosticOverlay",
+      "blockType": "COMMAND",
+      "text": "clear diagnostic overlay",
+      "description": "Removes the current diagnostic overlay without stopping the project.",
+      "arguments": {}
+    },
+    {
+      "opcode": "diagnosticOverlayVisible",
+      "blockType": "BOOLEAN",
+      "text": "diagnostic overlay is visible?",
+      "description": "Returns whether a diagnostic overlay is currently visible.",
+      "disableMonitor": true,
+      "arguments": {}
+    },
+    {
+      "opcode": "diagnosticSvg",
+      "blockType": "REPORTER",
+      "text": "diagnostic SVG for JSON [DIAGNOSTIC]",
+      "description": "Returns safe SVG text for one diagnostic without displaying it.",
+      "disableMonitor": true,
+      "arguments": {
+        "DIAGNOSTIC": {"type": "STRING", "defaultValue": "{\"severity\":\"warning\",\"code\":\"APP002\",\"message\":\"Please check the input.\"}"}
+      }
+    },
+    {
+      "opcode": "lastDiagnosticJson",
+      "blockType": "REPORTER",
+      "text": "last diagnostic JSON",
+      "description": "Returns the last displayed normalized diagnostic as JSON, or an empty string.",
+      "disableMonitor": true,
+      "arguments": {}
+    }
+  ]
+}
