@@ -8,27 +8,40 @@
     <link rel="canonical" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/">
     <link rel="alternate" hreflang="en" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
     <link rel="alternate" hreflang="ja" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/">
+    <link rel="alternate" hreflang="x-default" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
     <link rel="stylesheet" href="../assets/site.css">
   </head>
   <body>
-    <header class="site-header">
-      <nav class="nav" aria-label="ガイドのナビゲーション">
-        <a href="../"><strong>Diagnostic Overlay</strong></a>
-        <span class="nav-links">
-          <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay">GitHub</a>
-          <a href="../" hreflang="en" lang="en">EN</a>
-          <a href="./" hreflang="ja">日本語</a>
-        </span>
-      </nav>
+    <a class="skip-link" href="#main">ガイド本文へ移動</a>
+    <header class="app-bar">
+      <div class="app-bar-inner">
+        <a class="app-bar-brand" href="./" aria-label="Diagnostic Overlayガイドの先頭">
+          <span class="app-bar-mark" aria-hidden="true">D</span>
+          <span class="app-bar-label">Diagnostic Overlay</span>
+        </a>
+        <nav class="app-bar-sections" aria-label="ガイドのセクション">
+          <a href="#overview">概要</a>
+          <a href="#install">インストール</a>
+          <a href="#composition">Composition API</a>
+          <a href="#lifecycle">ライフサイクル</a>
+        </nav>
+        <div class="app-bar-actions">
+          <a class="app-bar-github" href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay" aria-label="GitHubでソースコードとリリースを見る">GitHub</a>
+          <nav class="app-bar-languages" aria-label="言語">
+            <a href="../" hreflang="en" lang="en">English</a>
+            <a href="./" hreflang="ja" lang="ja" aria-current="page">日本語</a>
+          </nav>
+        </div>
+      </div>
     </header>
-    <main>
+    <main id="main">
       <section class="hero">
         <p class="eyebrow">TurboWarp拡張機能 · v0.1.1</p>
         <h1>診断を、安全に、読みやすく。</h1>
         <p class="lead">1件の構造化診断を検証してXMLエスケープ済みSVGへ変換し、TurboWarpステージに追従する非操作型overlayとして表示します。</p>
       </section>
 
-      <section class="grid" aria-label="主な責務">
+      <section class="grid" id="overview" aria-label="主な責務">
         <article class="card"><span class="badge">検証</span><h2>厳密な入力</h2><p>severity、code、messageと任意のdetail・source位置を表示前に正規化します。</p></article>
         <article class="card"><span class="badge">描画</span><h2>安全なSVG text</h2><p>外部文字列をXMLエスケープし、要素名、属性、色、URLとしては使用しません。</p></article>
         <article class="card"><span class="badge">表示</span><h2>ステージへ追従</h2><p>renderer canvasのサイズ変更を追跡し、<code>pointer-events: none</code>で入力を妨げません。</p></article>
@@ -50,10 +63,10 @@
 const {extension, controller} = createDiagnosticOverlayComposition(Scratch);
 Scratch.extensions.register(extension);
 controller.show({severity: 'error', code: 'APP001', message: '入力を確認してください。'});</code></pre>
-        <p>純粋rendererは<code>/svg-renderer</code>から利用できます。詳細は<a href="../specification.md">0.1仕様</a>を参照してください。</p>
+        <p>純粋rendererは<code>/svg-renderer</code>から利用できます。詳細は<a href="./specification.md">0.1仕様</a>を参照してください。<a href="../specification.md" hreflang="en" lang="en">英語版</a>もあります。</p>
       </section>
 
-      <section class="grid" aria-label="ライフサイクルと責務境界">
+      <section class="grid" id="lifecycle" aria-label="ライフサイクルと責務境界">
         <article class="card"><h2>ライフサイクル</h2><p>新しい診断は現在の表示を置換します。プロジェクト読込時に消去し、runtime dispose時にDOM observerとlistenerを解放します。project stop後は原因を読めるよう表示を残します。</p></article>
         <article class="card"><h2>利用側の責務</h2><p>診断の発見、Scratch threadやVMを止める判断、永続化は利用側が行います。このpackageはアプリ固有DSLを知りません。</p></article>
       </section>
