@@ -8,27 +8,40 @@
     <link rel="canonical" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
     <link rel="alternate" hreflang="en" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
     <link rel="alternate" hreflang="ja" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/">
+    <link rel="alternate" hreflang="x-default" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
     <link rel="stylesheet" href="./assets/site.css">
   </head>
   <body>
-    <header class="site-header">
-      <nav class="nav" aria-label="Guide navigation">
-        <a href="./"><strong>Diagnostic Overlay</strong></a>
-        <span class="nav-links">
-          <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay">GitHub</a>
-          <a href="./" hreflang="en">EN</a>
-          <a href="./ja/" hreflang="ja" lang="ja">日本語</a>
-        </span>
-      </nav>
+    <a class="skip-link" href="#main">Skip to the guide</a>
+    <header class="app-bar">
+      <div class="app-bar-inner">
+        <a class="app-bar-brand" href="./" aria-label="Diagnostic Overlay guide home">
+          <span class="app-bar-mark" aria-hidden="true">D</span>
+          <span class="app-bar-label">Diagnostic Overlay</span>
+        </a>
+        <nav class="app-bar-sections" aria-label="Guide sections">
+          <a href="#overview">Overview</a>
+          <a href="#install">Installation</a>
+          <a href="#composition">Composition API</a>
+          <a href="#lifecycle">Lifecycle</a>
+        </nav>
+        <div class="app-bar-actions">
+          <a class="app-bar-github" href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay" aria-label="Source code and releases on GitHub">GitHub</a>
+          <nav class="app-bar-languages" aria-label="Language">
+            <a href="./" hreflang="en" lang="en" aria-current="page">English</a>
+            <a href="./ja/" hreflang="ja" lang="ja">日本語</a>
+          </nav>
+        </div>
+      </div>
     </header>
-    <main>
+    <main id="main">
       <section class="hero">
         <p class="eyebrow">TurboWarp extension · v0.1.1</p>
         <h1>Diagnostics people can read safely.</h1>
         <p class="lead">Validate one structured diagnostic, render escaped SVG, and keep a non-interactive overlay aligned with the TurboWarp stage.</p>
       </section>
 
-      <section class="grid" aria-label="Responsibilities">
+      <section class="grid" id="overview" aria-label="Responsibilities">
         <article class="card"><span class="badge">Validate</span><h2>Strict input</h2><p>Severity, code, message, optional detail, and source location are normalized before rendering.</p></article>
         <article class="card"><span class="badge">Render</span><h2>Safe SVG text</h2><p>Untrusted strings are XML-escaped and never become element names, attributes, colors, or URLs.</p></article>
         <article class="card"><span class="badge">Display</span><h2>Stage-aligned overlay</h2><p>The host follows renderer canvas size changes and uses <code>pointer-events: none</code>.</p></article>
@@ -50,10 +63,10 @@
 const {extension, controller} = createDiagnosticOverlayComposition(Scratch);
 Scratch.extensions.register(extension);
 controller.show({severity: 'error', code: 'APP001', message: 'Check the input.'});</code></pre>
-        <p>The pure renderer is also available from <code>/svg-renderer</code>. See the <a href="./specification.md">complete 0.1 contract</a>.</p>
+        <p>The pure renderer is also available from <code>/svg-renderer</code>. See the <a href="./specification.md">complete 0.1 contract</a>, also available <a href="./ja/specification.md" hreflang="ja" lang="ja">in Japanese</a>.</p>
       </section>
 
-      <section class="grid" aria-label="Lifecycle and boundaries">
+      <section class="grid" id="lifecycle" aria-label="Lifecycle and boundaries">
         <article class="card"><h2>Lifecycle</h2><p>A new diagnostic replaces the current one. Project load clears it. Runtime disposal releases DOM observers and listeners. Project stop intentionally leaves it visible.</p></article>
         <article class="card"><h2>Caller responsibilities</h2><p>The caller discovers diagnostics, decides whether to stop Scratch threads or the VM, and owns persistence. This package does not know any application-specific DSL.</p></article>
       </section>

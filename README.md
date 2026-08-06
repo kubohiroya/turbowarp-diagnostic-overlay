@@ -1,43 +1,50 @@
 # TurboWarp Diagnostic Overlay
 
-構造化された診断データを安全なSVGテキストへ変換し、TurboWarpステージ上に表示する汎用機能拡張です。紙芝居DSLなど特定のアプリケーションには依存しません。
+An application-neutral TurboWarp extension that validates structured diagnostics, renders them as
+safe SVG text, and displays them over the stage. It does not depend on a particular application or
+DSL.
 
-[English guide](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/)と
-[日本語ガイド](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/)では、導入、
-Composition API、安全性、ライフサイクルをまとめています。
+The [English guide](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/) and
+[Japanese guide](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/) cover installation,
+the Composition API, safety, and lifecycle behavior.
 
-## 責務の境界
+## Responsibility boundary
 
-このパッケージが担当するのは、診断データの検証、SVG生成、表示、更新、消去です。診断の発見、プロジェクトやScratchスレッドの停止、ログの永続化は利用側が担当します。
+This package validates diagnostic data, generates SVG, and displays, updates, or clears the current
+overlay. The caller discovers diagnostics, stops projects or Scratch threads when appropriate, and
+persists logs.
 
-外部からSVGやHTMLを受け取らず、すべての入力文字列をXMLエスケープします。オーバーレイは`pointer-events: none`であり、ステージのマウス・タッチ入力を妨げません。
+The renderer does not accept external SVG or HTML and XML-escapes every input string. The overlay
+uses `pointer-events: none`, so it does not block mouse or touch input on the stage.
 
-## インストール
+## Installation
 
-TurboWarp Desktopで[`dist/diagnostic-overlay.js`](dist/diagnostic-overlay.js)をローカル機能拡張として読み込み、**サンドボックスなしで実行**を許可します。
+Load [`dist/diagnostic-overlay.js`](dist/diagnostic-overlay.js) as a local custom extension in
+TurboWarp Desktop and allow it to **run without the sandbox**.
 
-npmから利用する場合はバージョンを固定してください。
+When installing from npm, pin the reviewed version:
 
 ```bash
 pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.1.1
 ```
 
-CDN上の単独機能拡張は次のURLです。
+The standalone extension is also available from this version-pinned CDN URL:
 
 ```text
 https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.1/dist/diagnostic-overlay.js
 ```
 
-## 診断JSON
+## Diagnostic JSON
 
-必須フィールドは`severity`、`code`、`message`です。`severity`は`info`、`warning`、`error`、`fatal`のいずれかです。
+The required fields are `severity`, `code`, and `message`. The `severity` value must be `info`,
+`warning`, `error`, or `fatal`.
 
 ```json
 {
   "severity": "error",
   "code": "DSL401",
-  "message": "未定義のステージです",
-  "detail": "stage2 は登録されていません。",
+  "message": "Stage is not defined",
+  "detail": "stage2 has not been registered.",
   "source": {
     "name": "story.kamishibai",
     "line": 18,
@@ -47,7 +54,8 @@ https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.1/dist
 }
 ```
 
-行と列は1から始まる正の整数です。空の省略可能文字列は未指定として扱います。未知のフィールドは将来互換性のため無視します。
+Line and column numbers are positive, one-based integers. Empty optional strings are treated as
+omitted. Unknown fields are ignored for forward compatibility.
 
 ## Blocks
 
@@ -119,7 +127,8 @@ Returns the last displayed normalized diagnostic as JSON, or an empty string.
 
 ## Composition API
 
-パッケージのルートまたは`/composition`は、TurboWarpへの自動登録を行わない副作用のないES moduleです。
+The package root and `/composition` are side-effect-free ES modules and do not register an extension
+with TurboWarp automatically.
 
 ```ts
 import {
@@ -129,29 +138,31 @@ import {
 
 const {extension, controller} = createDiagnosticOverlayComposition(Scratch);
 
-// 集約側が一度だけ登録する。
+// Register once at the composition root.
 Scratch.extensions.register(extension);
 
 controller.show({
   severity: 'error',
   code: 'APP001',
-  message: '入力を確認してください。'
+  message: 'Check the input.'
 });
 
 const svg = renderDiagnosticSvg({
   severity: 'warning',
   code: 'APP002',
-  message: 'この値は非推奨です。'
+  message: 'This value is deprecated.'
 });
 ```
 
-純粋なrendererだけを利用する場合は`@kubohiroya/turbowarp-diagnostic-overlay/svg-renderer`からimportできます。
+Import the pure renderer from `@kubohiroya/turbowarp-diagnostic-overlay/svg-renderer` when no
+extension or overlay controller is needed.
 
-詳しい契約は[`docs/specification.md`](docs/specification.md)を参照してください。
+See the [English specification](docs/specification.md) or
+[Japanese specification](docs/ja/specification.md) for the complete contract.
 
-## 開発
+## Development
 
-Node.js 22.12以降とCorepackを使用します。
+Use Node.js 22.12 or later with Corepack.
 
 ```bash
 corepack enable
@@ -160,16 +171,17 @@ pnpm run check
 pnpm run release:check
 ```
 
-`dist/diagnostic-overlay.js`はレビュー可能な単一ファイルとしてGitに含めます。ブロック定義を変更した場合は`pnpm run docs`でREADMEを更新します。
+`dist/diagnostic-overlay.js` is committed as a single reviewable file. Run `pnpm run docs` after
+changing block definitions to update this README.
 
-## リリース
+## Release
 
-リリースPRでは`package.json`、READMEと公開ガイドの固定バージョン、`CHANGELOG.md`を
-一致させます。mainのCIとPages deployが成功した後、そのマージコミットに
-`v<version>` tagを作成します。tag pushによりGitHub Releaseと単独機能拡張の配布artifactが
-生成されます。npmには同じversionを一度だけpublishします。利用側は直前versionへ固定して
-ロールバックできます。
+Keep the pinned version in `package.json`, this README, the public guides, and `CHANGELOG.md` in
+sync in every release PR. After CI and the Pages deployment succeed on `main`, create a
+`v<version>` tag on that merge commit. Pushing the tag creates the GitHub Release and standalone
+extension artifact. Publish the same version to npm exactly once. Consumers can roll back by
+pinning the preceding version.
 
-## ライセンス
+## License
 
 MPL-2.0
