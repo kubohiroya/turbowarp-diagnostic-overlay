@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="構造化診断を安全なSVGに変換してTurboWarpステージへ表示するDiagnostic Overlayの利用ガイド。">
+    <title>Diagnostic Overlay — 利用ガイド</title>
+    <link rel="canonical" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/">
+    <link rel="alternate" hreflang="en" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
+    <link rel="alternate" hreflang="ja" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/">
+    <link rel="stylesheet" href="../assets/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="ガイドのナビゲーション">
+        <a href="../"><strong>Diagnostic Overlay</strong></a>
+        <span class="nav-links">
+          <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay">GitHub</a>
+          <a href="../" hreflang="en" lang="en">EN</a>
+          <a href="./" hreflang="ja">日本語</a>
+        </span>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">TurboWarp拡張機能 · v0.1.1</p>
+        <h1>診断を、安全に、読みやすく。</h1>
+        <p class="lead">1件の構造化診断を検証してXMLエスケープ済みSVGへ変換し、TurboWarpステージに追従する非操作型overlayとして表示します。</p>
+      </section>
+
+      <section class="grid" aria-label="主な責務">
+        <article class="card"><span class="badge">検証</span><h2>厳密な入力</h2><p>severity、code、messageと任意のdetail・source位置を表示前に正規化します。</p></article>
+        <article class="card"><span class="badge">描画</span><h2>安全なSVG text</h2><p>外部文字列をXMLエスケープし、要素名、属性、色、URLとしては使用しません。</p></article>
+        <article class="card"><span class="badge">表示</span><h2>ステージへ追従</h2><p>renderer canvasのサイズ変更を追跡し、<code>pointer-events: none</code>で入力を妨げません。</p></article>
+      </section>
+
+      <section class="section" id="install">
+        <h2>レビュー済みビルドを導入</h2>
+        <pre><code>pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.1.1</code></pre>
+        <p>単独機能拡張は、次の固定URLをサンドボックスなしで読み込みます。</p>
+        <pre><code>https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.1/dist/diagnostic-overlay.js</code></pre>
+      </section>
+
+      <section class="section" id="composition">
+        <h2>Composition API</h2>
+        <p>packageをimportしただけではTurboWarpへ登録しません。composition rootがextensionとcontrollerを明示的に作成し、1度だけ登録します。</p>
+        <pre><code>import {createDiagnosticOverlayComposition} from
+  '@kubohiroya/turbowarp-diagnostic-overlay/composition';
+
+const {extension, controller} = createDiagnosticOverlayComposition(Scratch);
+Scratch.extensions.register(extension);
+controller.show({severity: 'error', code: 'APP001', message: '入力を確認してください。'});</code></pre>
+        <p>純粋rendererは<code>/svg-renderer</code>から利用できます。詳細は<a href="../specification.md">0.1仕様</a>を参照してください。</p>
+      </section>
+
+      <section class="grid" aria-label="ライフサイクルと責務境界">
+        <article class="card"><h2>ライフサイクル</h2><p>新しい診断は現在の表示を置換します。プロジェクト読込時に消去し、runtime dispose時にDOM observerとlistenerを解放します。project stop後は原因を読めるよう表示を残します。</p></article>
+        <article class="card"><h2>利用側の責務</h2><p>診断の発見、Scratch threadやVMを止める判断、永続化は利用側が行います。このpackageはアプリ固有DSLを知りません。</p></article>
+      </section>
+    </main>
+    <footer>TurboWarp Diagnostic Overlay · MPL-2.0 · <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay/releases/tag/v0.1.1">Release v0.1.1</a></footer>
+  </body>
+</html>

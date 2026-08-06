@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Guide for rendering structured diagnostics as safe SVG overlays in TurboWarp.">
+    <title>Diagnostic Overlay — Guide</title>
+    <link rel="canonical" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
+    <link rel="alternate" hreflang="en" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/">
+    <link rel="alternate" hreflang="ja" href="https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/">
+    <link rel="stylesheet" href="./assets/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Guide navigation">
+        <a href="./"><strong>Diagnostic Overlay</strong></a>
+        <span class="nav-links">
+          <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay">GitHub</a>
+          <a href="./" hreflang="en">EN</a>
+          <a href="./ja/" hreflang="ja" lang="ja">日本語</a>
+        </span>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">TurboWarp extension · v0.1.1</p>
+        <h1>Diagnostics people can read safely.</h1>
+        <p class="lead">Validate one structured diagnostic, render escaped SVG, and keep a non-interactive overlay aligned with the TurboWarp stage.</p>
+      </section>
+
+      <section class="grid" aria-label="Responsibilities">
+        <article class="card"><span class="badge">Validate</span><h2>Strict input</h2><p>Severity, code, message, optional detail, and source location are normalized before rendering.</p></article>
+        <article class="card"><span class="badge">Render</span><h2>Safe SVG text</h2><p>Untrusted strings are XML-escaped and never become element names, attributes, colors, or URLs.</p></article>
+        <article class="card"><span class="badge">Display</span><h2>Stage-aligned overlay</h2><p>The host follows renderer canvas size changes and uses <code>pointer-events: none</code>.</p></article>
+      </section>
+
+      <section class="section" id="install">
+        <h2>Install the reviewed build</h2>
+        <pre><code>pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.1.1</code></pre>
+        <p>For the standalone extension, load this pinned URL without sandboxing:</p>
+        <pre><code>https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.1/dist/diagnostic-overlay.js</code></pre>
+      </section>
+
+      <section class="section" id="composition">
+        <h2>Composition API</h2>
+        <p>Importing the package does not register a TurboWarp extension. The composition root explicitly creates the extension and controller, then registers it once.</p>
+        <pre><code>import {createDiagnosticOverlayComposition} from
+  '@kubohiroya/turbowarp-diagnostic-overlay/composition';
+
+const {extension, controller} = createDiagnosticOverlayComposition(Scratch);
+Scratch.extensions.register(extension);
+controller.show({severity: 'error', code: 'APP001', message: 'Check the input.'});</code></pre>
+        <p>The pure renderer is also available from <code>/svg-renderer</code>. See the <a href="./specification.md">complete 0.1 contract</a>.</p>
+      </section>
+
+      <section class="grid" aria-label="Lifecycle and boundaries">
+        <article class="card"><h2>Lifecycle</h2><p>A new diagnostic replaces the current one. Project load clears it. Runtime disposal releases DOM observers and listeners. Project stop intentionally leaves it visible.</p></article>
+        <article class="card"><h2>Caller responsibilities</h2><p>The caller discovers diagnostics, decides whether to stop Scratch threads or the VM, and owns persistence. This package does not know any application-specific DSL.</p></article>
+      </section>
+    </main>
+    <footer>TurboWarp Diagnostic Overlay · MPL-2.0 · <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay/releases/tag/v0.1.1">Release v0.1.1</a></footer>
+  </body>
+</html>
