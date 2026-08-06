@@ -47,7 +47,7 @@ footer {
 .app-bar-inner {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  min-height: 4rem;
+  min-height: 4.25rem;
   align-items: center;
   gap: 1rem;
 }
@@ -176,8 +176,7 @@ footer { padding: 2rem 0 3rem; color: #5a6679; }
     gap: .5rem;
   }
 
-  .app-bar-label,
-  .app-bar-github { display: none; }
+  .app-bar-label { display: none; }
 
   .app-bar-actions { grid-column: 2; }
 
