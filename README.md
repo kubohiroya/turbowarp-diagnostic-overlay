@@ -2,6 +2,10 @@
 
 構造化された診断データを安全なSVGテキストへ変換し、TurboWarpステージ上に表示する汎用機能拡張です。紙芝居DSLなど特定のアプリケーションには依存しません。
 
+[English guide](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/)と
+[日本語ガイド](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/)では、導入、
+Composition API、安全性、ライフサイクルをまとめています。
+
 ## 責務の境界
 
 このパッケージが担当するのは、診断データの検証、SVG生成、表示、更新、消去です。診断の発見、プロジェクトやScratchスレッドの停止、ログの永続化は利用側が担当します。
@@ -15,13 +19,13 @@ TurboWarp Desktopで[`dist/diagnostic-overlay.js`](dist/diagnostic-overlay.js)�
 npmから利用する場合はバージョンを固定してください。
 
 ```bash
-pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.1.0
+pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.1.1
 ```
 
 CDN上の単独機能拡張は次のURLです。
 
 ```text
-https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.0/dist/diagnostic-overlay.js
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.1/dist/diagnostic-overlay.js
 ```
 
 ## 診断JSON
@@ -157,6 +161,14 @@ pnpm run release:check
 ```
 
 `dist/diagnostic-overlay.js`はレビュー可能な単一ファイルとしてGitに含めます。ブロック定義を変更した場合は`pnpm run docs`でREADMEを更新します。
+
+## リリース
+
+リリースPRでは`package.json`、READMEと公開ガイドの固定バージョン、`CHANGELOG.md`を
+一致させます。mainのCIとPages deployが成功した後、そのマージコミットに
+`v<version>` tagを作成します。tag pushによりGitHub Releaseと単独機能拡張の配布artifactが
+生成されます。npmには同じversionを一度だけpublishします。利用側は直前versionへ固定して
+ロールバックできます。
 
 ## ライセンス
 
