@@ -1,4 +1,4 @@
-# TurboWarp Diagnostic Overlay
+# TurboWarp-Diagnostic-Overlay
 
 An application-neutral TurboWarp extension that validates structured diagnostics, renders them as
 safe SVG text, and displays them over the stage. It does not depend on a particular application or
