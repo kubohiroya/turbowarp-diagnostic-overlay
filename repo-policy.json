@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "productName": "TurboWarp Diagnostic Overlay",
+  "packageType": "extension-composition",
+  "licensePolicy": "mpl-2.0",
+  "packageManager": "pnpm",
+  "homepage": "pages",
+  "node": {
+    "minimum": "22.12.0"
+  },
+  "extension": {
+    "id": "kubohiroyadiagnosticoverlay",
+    "standaloneBundle": "dist/diagnostic-overlay.js",
+    "compositionTypes": "dist/lib/composition.d.ts"
+  },
+  "exceptions": {
+    "compositionApi": true,
+    "svgRendererExport": true,
+    "diagnosticExport": true
+  }
+}

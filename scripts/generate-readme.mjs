@@ -22,7 +22,7 @@ const next = readme.replace(
 
 if (process.argv.includes('--check')) {
   if (next !== readme) {
-    throw new Error('README.md block documentation is out of date. Run `pnpm docs`.');
+    throw new Error('README.md block documentation is out of date. Run `pnpm run docs`.');
   }
 } else {
   await writeFile(readmeUrl, next);
