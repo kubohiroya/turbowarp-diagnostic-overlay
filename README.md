@@ -25,13 +25,13 @@ TurboWarp Desktop and allow it to **run without the sandbox**.
 When installing from npm, pin the reviewed version:
 
 ```bash
-pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.1.1
+pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.2.0
 ```
 
 The standalone extension is also available from this version-pinned CDN URL:
 
 ```text
-https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.1.1/dist/diagnostic-overlay.js
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.2.0/dist/diagnostic-overlay.js
 ```
 
 ## Diagnostic JSON
@@ -184,4 +184,4 @@ pinning the preceding version.
 
 ## License
 
-MPL-2.0
+SPDX-License-Identifier: MPL-2.0

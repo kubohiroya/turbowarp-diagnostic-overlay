@@ -1,6 +1,6 @@
 {
   "name": "@kubohiroya/turbowarp-diagnostic-overlay",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Render structured diagnostics as safe SVG overlays on the TurboWarp stage.",
   "keywords": [
     "turbowarp",
@@ -74,7 +74,8 @@
     "check:dist": "pnpm run build && git diff --exit-code -- dist",
     "pack:check": "npm pack --dry-run --ignore-scripts",
     "release:check": "npm publish --dry-run --access public --ignore-scripts",
-    "check": "pnpm run audit && pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run build && pnpm run docs:check && pnpm run site:check && pnpm run check:dist && pnpm run pack:check",
+    "repo:check": "node scripts/check-repo.mjs",
+    "check": "pnpm run audit && pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run build && pnpm run docs:check && pnpm run site:check && pnpm run check:dist && pnpm run repo:check && pnpm run pack:check",
     "prepublishOnly": "pnpm run check"
   },
   "devDependencies": {
