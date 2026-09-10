@@ -2,6 +2,14 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.3.0] - 2026-09-10
+
+### Changed
+
+- リポジトリスクリプトを`.mjs`からTypeScriptへ移行し、Nodeのネイティブ型ストリッピングで実行するようにしました。
+- `engines.node`を`>=22.18.0`に引き上げました。型ストリッピングがフラグなしで動作する最初のリリースです。
+- ビルドをVite 8および`vite-plugin-turbowarp-extension` 0.3.0へ更新しました。生成される拡張機能バンドルが再生成されます。
+
 ## [0.2.0] - 2026-08-25
 
 ### Changed
