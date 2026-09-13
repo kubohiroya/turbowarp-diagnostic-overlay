@@ -34,6 +34,14 @@ The standalone extension is also available from this version-pinned CDN URL:
 https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.3.0/dist/diagnostic-overlay.js
 ```
 
+The machine-readable block API manifest is generated from `src/block-definitions.json` during the
+build. Consumers can pin and verify the extension ID, opcodes, block types, argument IDs and types,
+and menu references without evaluating the runtime bundle:
+
+```text
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.3.0/dist/extension-manifest.json
+```
+
 ## Diagnostic JSON
 
 The required fields are `severity`, `code`, and `message`. The `severity` value must be `info`,
@@ -171,8 +179,8 @@ pnpm run check
 pnpm run release:check
 ```
 
-`dist/diagnostic-overlay.js` is committed as a single reviewable file. Run `pnpm run docs` after
-changing block definitions to update this README.
+`dist/diagnostic-overlay.js` and `dist/extension-manifest.json` are committed as reviewable generated
+artifacts. Run `pnpm run docs` after changing block definitions to update this README.
 
 ## Release
 

@@ -11,6 +11,7 @@
   "extension": {
     "id": "kubohiroyadiagnosticoverlay",
     "standaloneBundle": "dist/diagnostic-overlay.js",
+    "manifest": "dist/extension-manifest.json",
     "compositionTypes": "dist/lib/composition.d.ts"
   },
   "exceptions": {

@@ -1,0 +1,66 @@
+{
+  "formatVersion": 1,
+  "id": "kubohiroyadiagnosticoverlay",
+  "blocks": [
+    {
+      "opcode": "clearDiagnosticOverlay",
+      "blockType": "COMMAND",
+      "arguments": []
+    },
+    {
+      "opcode": "diagnosticOverlayVisible",
+      "blockType": "BOOLEAN",
+      "arguments": []
+    },
+    {
+      "opcode": "diagnosticSvg",
+      "blockType": "REPORTER",
+      "arguments": [
+        {
+          "id": "DIAGNOSTIC",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "opcode": "lastDiagnosticJson",
+      "blockType": "REPORTER",
+      "arguments": []
+    },
+    {
+      "opcode": "showDiagnostic",
+      "blockType": "COMMAND",
+      "arguments": [
+        {
+          "id": "CODE",
+          "type": "STRING"
+        },
+        {
+          "id": "MESSAGE",
+          "type": "STRING"
+        },
+        {
+          "id": "SEVERITY",
+          "type": "STRING",
+          "menu": "severityMenu"
+        }
+      ]
+    },
+    {
+      "opcode": "showDiagnosticJson",
+      "blockType": "COMMAND",
+      "arguments": [
+        {
+          "id": "DIAGNOSTIC",
+          "type": "STRING"
+        }
+      ]
+    }
+  ],
+  "menus": [
+    {
+      "id": "severityMenu",
+      "acceptReporters": true
+    }
+  ]
+}

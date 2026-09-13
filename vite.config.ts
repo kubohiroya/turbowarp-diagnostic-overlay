@@ -1,5 +1,7 @@
 import {defineConfig} from 'vite';
 import {turboWarpExtension} from '@kubohiroya/vite-plugin-turbowarp-extension';
+import {extensionManifestPlugin} from '@kubohiroya/turbowarp-extension-manifest';
+import definitions from './src/block-definitions.json' with {type: 'json'};
 import {extensionConfig} from './src/config.js';
 
 export default defineConfig({
@@ -11,6 +13,10 @@ export default defineConfig({
       author: extensionConfig.author,
       license: extensionConfig.license,
       fileName: `${extensionConfig.slug}.js`
+    }),
+    extensionManifestPlugin({
+      id: extensionConfig.id,
+      definitions
     })
   ]
 });

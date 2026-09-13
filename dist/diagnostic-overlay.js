@@ -9,6 +9,7 @@
 
   var block_definitions_default = {
   	extensionName: "Diagnostic Overlay",
+  	menus: { "severityMenu": { "acceptReporters": true } },
   	blocks: [
   		{
   			"opcode": "showDiagnostic",
