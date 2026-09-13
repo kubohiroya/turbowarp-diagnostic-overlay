@@ -2,6 +2,16 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.4.0] - 2026-09-13
+
+### Added
+
+- TurboWarp block contractを機械検証するための決定的な`dist/extension-manifest.json`を追加しました。
+
+### Compatibility
+
+- 利用側は`@kubohiroya/turbowarp-diagnostic-overlay@0.3.0`へ固定してロールバックできます。
+
 ## [0.3.0] - 2026-09-10
 
 ### Changed

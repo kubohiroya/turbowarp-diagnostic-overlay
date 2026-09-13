@@ -1,6 +1,7 @@
 import {execFile} from 'node:child_process';
 import {readFile} from 'node:fs/promises';
 import {promisify} from 'node:util';
+import {serializeExtensionManifest} from '@kubohiroya/turbowarp-extension-manifest';
 
 interface PackageMetadata {
   name: string;
@@ -33,6 +34,7 @@ interface RepoPolicy {
   extension: {
     id: string;
     standaloneBundle: string;
+    manifest: string;
     compositionTypes: string;
   };
   exceptions: {
@@ -57,6 +59,8 @@ const changelog = await readFile('CHANGELOG.md', 'utf8');
 const license = await readFile('LICENSE', 'utf8');
 const config = await readFile('src/config.ts', 'utf8');
 const bundle = await readFile(policy.extension.standaloneBundle, 'utf8');
+const blockDefinitions = JSON.parse(await readFile('src/block-definitions.json', 'utf8')) as unknown;
+const extensionManifest = await readFile(policy.extension.manifest, 'utf8');
 const compositionTypes = await readFile(policy.extension.compositionTypes, 'utf8');
 const pages = [
   await readFile('docs/index.html', 'utf8'),
@@ -69,6 +73,7 @@ checkReadme();
 checkChangelog();
 checkLicense();
 checkBundleMetadata();
+checkExtensionManifest();
 await checkPackContents();
 
 if (errors.length > 0) {
@@ -158,6 +163,17 @@ function checkBundleMetadata() {
   }
 }
 
+function checkExtensionManifest() {
+  const expected = serializeExtensionManifest(policy.extension.id, blockDefinitions);
+  if (extensionManifest !== expected) {
+    errors.push('dist/extension-manifest.json must match src/block-definitions.json byte-for-byte');
+  }
+  const manifestUrl = `https://cdn.jsdelivr.net/npm/${packageMetadata.name}@${packageMetadata.version}/${policy.extension.manifest}`;
+  if (!readme.includes(manifestUrl)) {
+    errors.push('README.md manifest URL must match package version and repository policy');
+  }
+}
+
 async function checkPackContents() {
   const {stdout} = await execFileAsync('npm', ['pack', '--dry-run', '--ignore-scripts', '--json']);
   const [pack] = JSON.parse(stdout) as PackResult[];
@@ -171,6 +187,7 @@ async function checkPackContents() {
     'LICENSE',
     'CHANGELOG.md',
     policy.extension.standaloneBundle,
+    policy.extension.manifest,
     policy.extension.compositionTypes
   ]) {
     if (!files.has(file)) errors.push(`npm pack must include ${file}`);
