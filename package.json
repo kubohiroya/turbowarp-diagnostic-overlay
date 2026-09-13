@@ -1,6 +1,6 @@
 {
   "name": "@kubohiroya/turbowarp-diagnostic-overlay",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Render structured diagnostics as safe SVG overlays on the TurboWarp stage.",
   "keywords": [
     "turbowarp",
@@ -58,7 +58,7 @@
   },
   "packageManager": "pnpm@11.11.0",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "dev": "vite build --watch",
@@ -68,25 +68,25 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "audit": "pnpm audit --prod --audit-level high",
-    "docs": "node scripts/generate-readme.mjs",
-    "docs:check": "node scripts/generate-readme.mjs --check",
-    "site:check": "node scripts/check-site.mjs",
+    "docs": "node scripts/generate-readme.ts",
+    "docs:check": "node scripts/generate-readme.ts --check",
+    "site:check": "node scripts/check-site.ts",
     "check:dist": "pnpm run build && git diff --exit-code -- dist",
     "pack:check": "npm pack --dry-run --ignore-scripts",
     "release:check": "npm publish --dry-run --access public --ignore-scripts",
-    "repo:check": "node scripts/check-repo.mjs",
+    "repo:check": "node scripts/check-repo.ts",
     "check": "pnpm run audit && pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run build && pnpm run docs:check && pnpm run site:check && pnpm run check:dist && pnpm run repo:check && pnpm run pack:check",
     "prepublishOnly": "pnpm run check"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@kubohiroya/vite-plugin-turbowarp-extension": "0.1.1",
+    "@kubohiroya/vite-plugin-turbowarp-extension": "0.4.0",
     "@types/node": "^26.1.2",
     "eslint": "^10.8.0",
     "jsdom": "^30.0.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.65.0",
-    "vite": "^7.3.6",
+    "vite": "^8.2.2",
     "vitest": "^4.1.10"
   }
 }
