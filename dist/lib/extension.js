@@ -17,6 +17,7 @@ export class DiagnosticOverlayExtension {
     getInfo() {
         return {
             id: extensionConfig.id,
+            docsURI: 'https://kubohiroya.github.io/turbowarp-diagnostic-overlay/',
             name: this.scratch.translate(definitions.extensionName),
             color1: '#C44747',
             color2: '#A83B3B',

@@ -252,6 +252,7 @@
   	getInfo() {
   		return {
   			id: extensionConfig.id,
+  			docsURI: "https://kubohiroya.github.io/turbowarp-diagnostic-overlay/",
   			name: this.scratch.translate(block_definitions_default.extensionName),
   			color1: "#C44747",
   			color2: "#A83B3B",
