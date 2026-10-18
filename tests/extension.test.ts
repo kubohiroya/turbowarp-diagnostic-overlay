@@ -10,11 +10,18 @@ describe('DiagnosticOverlayExtension', () => {
     const {extension} = setup();
     const info = extension.getInfo() as {
       id: string;
+      blockIconURI: string;
       blocks: Array<{opcode: string}>;
       menus: {severityMenu: {items: string[]}};
     };
 
     expect(info.id).toBe('kubohiroyadiagnosticoverlay');
+    expect(info.blockIconURI).toMatch(/^data:image\/svg\+xml;base64,[A-Za-z0-9+/]+=*$/u);
+    const iconSvg = new DOMParser().parseFromString(atob(info.blockIconURI.split(',')[1]!), 'image/svg+xml');
+    expect(iconSvg.documentElement.localName).toBe('svg');
+    expect(iconSvg.querySelector('parsererror, script, foreignObject, image, use, a')).toBeNull();
+    expect(iconSvg.querySelectorAll('[href], [src], [onload], [onclick]')).toHaveLength(0);
+
     expect(info.blocks.map((block) => block.opcode)).toEqual([
       'showDiagnostic',
       'showDiagnosticJson',

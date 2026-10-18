@@ -2,6 +2,18 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.5.0] - 2026-10-18
+
+### Added
+
+- 固定Schemaに基づくSource/Form編集とseverity選択、既存GUIの編集導線に必要なblock iconを追加しました。
+- 起動時固定・既定OFFの`blockEditorSourceForms`と`blockEditorDialogs`により段階導入します。
+
+### Compatibility
+
+- 既存APIとraw保存形式を保持します。無変更・Cancelでは元の入力を維持します。
+- flagをOFFにして再読込するか、`@kubohiroya/turbowarp-diagnostic-overlay@0.4.0`へ固定してロールバックできます。
+
 ## [0.4.0] - 2026-09-13
 
 ### Added

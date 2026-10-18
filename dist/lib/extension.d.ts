@@ -6,6 +6,7 @@ export declare class DiagnosticOverlayExtension {
     private readonly controller;
     private readonly runtime;
     private disposed;
+    private readonly unregisterSourceEditors;
     constructor(scratch: ScratchApi, controller: DiagnosticOverlayController);
     getInfo(): Record<string, unknown>;
     showDiagnostic(args: BlockArguments): void;
