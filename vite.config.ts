@@ -17,6 +17,14 @@ export default defineConfig({
     extensionManifestPlugin({
       id: extensionConfig.id,
       definitions
-    })
+    }),
+    {
+      name: 'stable-generated-region-comments',
+      renderChunk(code) {
+        // Generated module paths depend on the package store and checkout location.
+        // Preserve license comments and executable code while omitting region markers.
+        return {code: code.replace(/^[\t ]*\/\/#(?:end)?region[^\r\n]*(?:\r?\n|$)/gm, ''), map: null};
+      }
+    }
   ]
 });

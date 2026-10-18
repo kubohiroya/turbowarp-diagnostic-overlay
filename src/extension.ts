@@ -1,3 +1,5 @@
+import {sourceEditorDefinitions} from './editor-schema.js';
+import {registerSourceEditors} from './source-editor.js';
 import definitions from './block-definitions.json' with {type: 'json'};
 import {extensionConfig} from './config.js';
 import {parseDiagnosticJson} from './diagnostic.js';
@@ -29,12 +31,14 @@ const blockDefinitions = definitions.blocks as readonly DefinitionBlock[];
 export class DiagnosticOverlayExtension {
   private readonly runtime: TurboWarpRuntime;
   private disposed = false;
+  private readonly unregisterSourceEditors: () => void;
 
   public constructor(
     private readonly scratch: ScratchApi,
     private readonly controller: DiagnosticOverlayController
   ) {
     this.runtime = scratch.vm.runtime;
+    this.unregisterSourceEditors = registerSourceEditors(scratch, sourceEditorDefinitions);
     this.runtime.on?.('PROJECT_LOADED', this.clearOnProjectLoad);
     this.runtime.on?.('RUNTIME_DISPOSED', this.dispose);
   }
@@ -42,6 +46,7 @@ export class DiagnosticOverlayExtension {
   public getInfo(): Record<string, unknown> {
     return {
       id: extensionConfig.id,
+      blockIconURI: extensionConfig.blockIconURI,
       docsURI: 'https://kubohiroya.github.io/turbowarp-diagnostic-overlay/',
       name: this.scratch.translate(definitions.extensionName),
       color1: '#C44747',
@@ -89,6 +94,7 @@ export class DiagnosticOverlayExtension {
   public readonly dispose = (): void => {
     if (this.disposed) return;
     this.disposed = true;
+    this.unregisterSourceEditors();
     this.runtime.off?.('PROJECT_LOADED', this.clearOnProjectLoad);
     this.runtime.off?.('RUNTIME_DISPOSED', this.dispose);
     this.controller.dispose();

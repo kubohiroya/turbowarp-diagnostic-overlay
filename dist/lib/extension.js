@@ -1,3 +1,5 @@
+import { sourceEditorDefinitions } from './editor-schema.js';
+import { registerSourceEditors } from './source-editor.js';
 import definitions from './block-definitions.json' with { type: 'json' };
 import { extensionConfig } from './config.js';
 import { parseDiagnosticJson } from './diagnostic.js';
@@ -7,16 +9,19 @@ export class DiagnosticOverlayExtension {
     controller;
     runtime;
     disposed = false;
+    unregisterSourceEditors;
     constructor(scratch, controller) {
         this.scratch = scratch;
         this.controller = controller;
         this.runtime = scratch.vm.runtime;
+        this.unregisterSourceEditors = registerSourceEditors(scratch, sourceEditorDefinitions);
         this.runtime.on?.('PROJECT_LOADED', this.clearOnProjectLoad);
         this.runtime.on?.('RUNTIME_DISPOSED', this.dispose);
     }
     getInfo() {
         return {
             id: extensionConfig.id,
+            blockIconURI: extensionConfig.blockIconURI,
             docsURI: 'https://kubohiroya.github.io/turbowarp-diagnostic-overlay/',
             name: this.scratch.translate(definitions.extensionName),
             color1: '#C44747',
@@ -58,6 +63,7 @@ export class DiagnosticOverlayExtension {
         if (this.disposed)
             return;
         this.disposed = true;
+        this.unregisterSourceEditors();
         this.runtime.off?.('PROJECT_LOADED', this.clearOnProjectLoad);
         this.runtime.off?.('RUNTIME_DISPOSED', this.dispose);
         this.controller.dispose();
