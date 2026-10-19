@@ -2,6 +2,17 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.5.1] - 2026-10-19
+
+### Changed
+
+- 既存の公開API・保存形式・既定OFFのフラグを維持し、共通エディターとビルド依存を検証済みの最新npm改訂版へ固定しました。
+- 公開パッケージに基準Git SHAとリリース用変更状態のメタデータを追加しました。
+
+### Compatibility
+
+- 既存データの移行は不要です。flagをOFFにして再読込するか、`@kubohiroya/turbowarp-diagnostic-overlay@0.5.0`へ固定してロールバックできます。
+
 ## [0.5.0] - 2026-10-18
 
 ### Added
