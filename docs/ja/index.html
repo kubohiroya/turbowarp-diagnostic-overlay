@@ -70,6 +70,7 @@ controller.show({severity: 'error', code: 'APP001', message: '入力を確認し
         <article class="card"><h2>ライフサイクル</h2><p>新しい診断は現在の表示を置換します。プロジェクト読込時に消去し、runtime dispose時にDOM observerとlistenerを解放します。project stop後は原因を読めるよう表示を残します。</p></article>
         <article class="card"><h2>利用側の責務</h2><p>診断の発見、Scratch threadやVMを止める判断、永続化は利用側が行います。このpackageはアプリ固有DSLを知りません。</p></article>
       </section>
+      <p><a href="../#block-showDiagnostic">showDiagnosticの固定アンカーとSEVERITY固定フォームの説明</a>：info・warning・error・fatalを選択し、未変更の原文を保持します。CODE/MESSAGEはこのフォームの対象外です。</p>
     </main>
     <footer>TurboWarp-Diagnostic-Overlay · MPL-2.0 · <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay/releases/tag/v0.2.0">Release v0.2.0</a></footer>
   </body>

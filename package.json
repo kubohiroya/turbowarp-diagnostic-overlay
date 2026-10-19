@@ -70,8 +70,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "audit": "pnpm audit --prod --audit-level high",
-    "docs": "node scripts/generate-readme.ts",
-    "docs:check": "node scripts/generate-readme.ts --check",
+    "docs": "node scripts/generate-readme.ts && node scripts/generate-fixed-input-docs.mjs",
+    "docs:check": "node scripts/generate-readme.ts --check && node scripts/generate-fixed-input-docs.mjs --check",
     "site:check": "node scripts/check-site.ts",
     "check:dist": "pnpm run build && git diff --exit-code -- dist",
     "pack:check": "npm pack --dry-run --ignore-scripts",
@@ -94,6 +94,6 @@
     "react-dom": "18.3.1"
   },
   "dependencies": {
-    "@kubohiroya/turbowarp-extension-data-editor": "git+https://github.com/kubohiroya/turbowarp-extension-data-editor.git#76fa1d50a3c188082ceef723ea018a9d8769ea6e"
+    "@kubohiroya/turbowarp-extension-data-editor": "git+https://github.com/kubohiroya/turbowarp-extension-data-editor.git#485f0e550e622235624b5e9176820161aeeba252"
   }
 }

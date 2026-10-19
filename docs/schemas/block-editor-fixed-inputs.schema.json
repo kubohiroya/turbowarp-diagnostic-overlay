@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kubohiroya.github.io/turbowarp-diagnostic-overlay/schemas/block-editor-fixed-inputs.schema.json",
+  "$defs": {
+    "showDiagnostic": {
+      "type": "object",
+      "properties": {
+        "SEVERITY": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "fatal"
+          ]
+        }
+      },
+      "required": [
+        "SEVERITY"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import {fixedInputEditorDefinitions, registerFixedInputEditors} from './fixed-input-editors.js';
 import {sourceEditorDefinitions} from './editor-schema.js';
 import {registerSourceEditors} from './source-editor.js';
 import definitions from './block-definitions.json' with {type: 'json'};
@@ -32,6 +33,7 @@ export class DiagnosticOverlayExtension {
   private readonly runtime: TurboWarpRuntime;
   private disposed = false;
   private readonly unregisterSourceEditors: () => void;
+  private readonly unregisterFixedInputEditors: () => void;
 
   public constructor(
     private readonly scratch: ScratchApi,
@@ -39,8 +41,19 @@ export class DiagnosticOverlayExtension {
   ) {
     this.runtime = scratch.vm.runtime;
     this.unregisterSourceEditors = registerSourceEditors(scratch, sourceEditorDefinitions);
-    this.runtime.on?.('PROJECT_LOADED', this.clearOnProjectLoad);
-    this.runtime.on?.('RUNTIME_DISPOSED', this.dispose);
+    let unregisterFixed = () => {};
+    try {
+      unregisterFixed = registerFixedInputEditors(scratch, fixedInputEditorDefinitions);
+      this.unregisterFixedInputEditors = unregisterFixed;
+      this.runtime.on?.('PROJECT_LOADED', this.clearOnProjectLoad);
+      this.runtime.on?.('RUNTIME_DISPOSED', this.dispose);
+    } catch (error) {
+      this.runtime.off?.('PROJECT_LOADED', this.clearOnProjectLoad);
+      this.runtime.off?.('RUNTIME_DISPOSED', this.dispose);
+      unregisterFixed();
+      this.unregisterSourceEditors();
+      throw error;
+    }
   }
 
   public getInfo(): Record<string, unknown> {
@@ -94,6 +107,7 @@ export class DiagnosticOverlayExtension {
   public readonly dispose = (): void => {
     if (this.disposed) return;
     this.disposed = true;
+    this.unregisterFixedInputEditors();
     this.unregisterSourceEditors();
     this.runtime.off?.('PROJECT_LOADED', this.clearOnProjectLoad);
     this.runtime.off?.('RUNTIME_DISPOSED', this.dispose);

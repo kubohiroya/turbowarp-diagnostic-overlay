@@ -193,3 +193,15 @@ pinning the preceding version.
 ## License
 
 SPDX-License-Identifier: MPL-2.0
+
+## 固定引数の編集フォーム（S3-4）
+
+共通エディターの起動時フラグ `blockEditorFixedInputs` とDialogsがONのGUIでは、`showDiagnostic` の `SEVERITY` だけを固定フォームとして登録します。旧GUI・フラグOFFでは追加登録を行いません。Schemaの正本は `schemas/block-editor-fixed-inputs.schema.json#/$defs/showDiagnostic/properties/SEVERITY`、codecと登録は `src/fixed-input-editors.ts` です。既存raw値・未変更alias・未知enumは無操作保存で書き換えず、reporterを評価しません。明示変更だけを検査し、他の引数やブロック宣言、保存形式を変更しません。
+
+SEVERITYの候補はinfo/warning/error/fatalです。既存runtimeのtrim/lowercaseを投影へ適用し、未変更の原文は保持します。CODE/MESSAGEは今回のbindingに追加しません。
+
+登録はoptional API（apiVersion:1）に限定し、RUNTIME_DISPOSED/明示disposeで解除します。起動フラグOFF＋再読込で従来経路へ切り戻せます。依存を戻す場合はmanifest/lock/実解決を一組で復旧します。npm公開や後続段階の動的候補は含みません。
+
+Schemaが記述する契約の根拠は実getInfoの宣言と既存の純粋なruntime変換です。SchemaBundleのretrievalUriはこのローカル文書の識別子であり、URL配信済み・HTTP取得によるref解決を意味しません。Schemaは同梱文書だけでcompileします。
+
+Registration uses the optional editor API available when the extension instance is constructed. Adding or replacing that API later is not followed automatically; reload the GUI and reconstruct the extension instance after changing the startup configuration.

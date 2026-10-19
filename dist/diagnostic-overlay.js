@@ -56,6 +56,157 @@
   	unsandboxed: true,
   	blockIconURI: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3QgeD0iNCIgeT0iOCIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE0IiByeD0iMyIgZmlsbD0iIzRDOTdGRiIvPjxyZWN0IHg9IjI2IiB5PSI4IiB3aWR0aD0iMTgiIGhlaWdodD0iMTQiIHJ4PSIzIiBmaWxsPSIjNTlDMDU5Ii8+PHJlY3QgeD0iMTUiIHk9IjI2IiB3aWR0aD0iMTgiIGhlaWdodD0iMTQiIHJ4PSIzIiBmaWxsPSIjRkZBQjE5Ii8+PC9zdmc+"
   };
+  var block_editor_fixed_inputs_schema_default = {
+  	$schema: "https://json-schema.org/draft/2020-12/schema",
+  	$id: "https://kubohiroya.github.io/turbowarp-diagnostic-overlay/schemas/block-editor-fixed-inputs.schema.json",
+  	$defs: { "showDiagnostic": {
+  		"type": "object",
+  		"properties": { "SEVERITY": {
+  			"type": "string",
+  			"enum": [
+  				"info",
+  				"warning",
+  				"error",
+  				"fatal"
+  			]
+  		} },
+  		"required": ["SEVERITY"],
+  		"additionalProperties": true
+  	} }
+  };
+  var source = {
+  	repository: "turbowarp-diagnostic-overlay",
+  	path: "schemas/block-editor-fixed-inputs.schema.json",
+  	symbol: "#/$defs/showDiagnostic/properties/SEVERITY"
+  };
+  /** The on-disk owner Schema is canonical; this is its single-field projection. */
+  var fixedInputSchemaBundle = {
+  	identity: {
+  		ownerId: "turbowarp-diagnostic-overlay",
+  		contractId: "showDiagnostic.SEVERITY",
+  		revision: "fixed-inputs-v1",
+  		variantId: "default"
+  	},
+  	dialect: "2020-12",
+  	root: {
+  		retrievalUri: "https://kubohiroya.github.io/turbowarp-diagnostic-overlay/schemas/showDiagnostic-SEVERITY.schema.json",
+  		document: block_editor_fixed_inputs_schema_default.$defs.showDiagnostic.properties.SEVERITY,
+  		artifact: {
+  			role: "canonical-schema",
+  			source
+  		}
+  	},
+  	resources: [],
+  	provenance: {
+  		canonicalSources: [source, {
+  			repository: "turbowarp-diagnostic-overlay",
+  			path: "src/extension.ts",
+  			symbol: "severity"
+  		}],
+  		generatedFiles: [{
+  			repository: "turbowarp-diagnostic-overlay",
+  			path: "docs/schemas/block-editor-fixed-inputs.schema.json"
+  		}, {
+  			repository: "turbowarp-diagnostic-overlay",
+  			path: "dist/schemas/block-editor-fixed-inputs.schema.json"
+  		}],
+  		referenceSchemas: [],
+  		generationSources: [{
+  			repository: "turbowarp-diagnostic-overlay",
+  			path: "scripts/generate-fixed-input-docs.mjs"
+  		}, {
+  			repository: "turbowarp-diagnostic-overlay",
+  			path: "scripts/copy-editor-schema.mjs"
+  		}]
+  	}
+  };
+  var choices = [
+  	"info",
+  	"warning",
+  	"error",
+  	"fatal"
+  ];
+  var fixedInputEditorDefinitions = [{
+  	apiVersion: 1,
+  	extensionId: extensionConfig.id,
+  	editorId: "showDiagnostic-fixed-inputs",
+  	opcodes: [`${extensionConfig.id}_showDiagnostic`],
+  	contractId: "turbowarp-diagnostic-overlay:showDiagnostic.SEVERITY",
+  	contractRevision: "fixed-inputs-v1",
+  	bindings: [{
+  		argument: "SEVERITY",
+  		schemaBundle: fixedInputSchemaBundle,
+  		control: {
+  			kind: "enum",
+  			label: "SEVERITY",
+  			choices: [
+  				{
+  					"value": "info",
+  					"label": "info"
+  				},
+  				{
+  					"value": "warning",
+  					"label": "warning"
+  				},
+  				{
+  					"value": "error",
+  					"label": "error"
+  				},
+  				{
+  					"value": "fatal",
+  					"label": "fatal"
+  				}
+  			]
+  		},
+  		read(value) {
+  			if (typeof value !== "string") throw new TypeError("Expected a literal enum value.");
+  			const normalized = value.trim().toLowerCase();
+  			return choices.includes(normalized) ? normalized : value;
+  		},
+  		encode(value) {
+  			if (typeof value !== "string" || !choices.includes(value)) throw new TypeError("Unsupported severity.");
+  			return value;
+  		},
+  		validateCandidate(value) {
+  			return typeof value === "string" && choices.includes(value.trim().toLowerCase()) ? [] : [{
+  				path: "/inputs/SEVERITY",
+  				message: "Unsupported diagnostic severity."
+  			}];
+  		}
+  	}],
+  	validationContext: () => ({
+  		consumerId: extensionConfig.id,
+  		nowMs: Date.now(),
+  		settings: null
+  	})
+  }];
+  /** Register metadata only; the GUI startup capability owns editor activation. */
+  function registerFixedInputEditors(scratch, definitions, runtimeOverride) {
+  	const host = scratch;
+  	const api = host.gui?.blockEditors;
+  	if (!definitions.length || api?.apiVersion !== 1 || typeof api.registerFixedInputEditor !== "function") return () => {};
+  	const runtime = runtimeOverride ?? host.vm?.runtime;
+  	const removers = [];
+  	let active = true;
+  	const dispose = () => {
+  		if (!active) return;
+  		active = false;
+  		runtime?.off?.("RUNTIME_DISPOSED", dispose);
+  		for (const remove of removers.splice(0).reverse()) remove();
+  	};
+  	try {
+  		for (const definition of definitions) {
+  			const remove = api.registerFixedInputEditor.call(api, definition);
+  			if (typeof remove !== "function") throw new TypeError("Invalid fixed input registration disposer.");
+  			removers.push(remove);
+  		}
+  		runtime?.on?.("RUNTIME_DISPOSED", dispose);
+  	} catch (error) {
+  		dispose();
+  		throw error;
+  	}
+  	return dispose;
+  }
   var require_code$1 = /* @__PURE__ */ __commonJSMin(((exports) => {
   	Object.defineProperty(exports, "__esModule", { value: true });
   	exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = void 0;
@@ -8239,9 +8390,11 @@
   		_defineProperty(this, "runtime", void 0);
   		_defineProperty(this, "disposed", false);
   		_defineProperty(this, "unregisterSourceEditors", void 0);
+  		_defineProperty(this, "unregisterFixedInputEditors", void 0);
   		_defineProperty(this, "dispose", () => {
   			if (this.disposed) return;
   			this.disposed = true;
+  			this.unregisterFixedInputEditors();
   			this.unregisterSourceEditors();
   			this.runtime.off?.("PROJECT_LOADED", this.clearOnProjectLoad);
   			this.runtime.off?.("RUNTIME_DISPOSED", this.dispose);
@@ -8254,8 +8407,19 @@
   		this.controller = controller;
   		this.runtime = scratch.vm.runtime;
   		this.unregisterSourceEditors = registerSourceEditors(scratch, sourceEditorDefinitions);
-  		this.runtime.on?.("PROJECT_LOADED", this.clearOnProjectLoad);
-  		this.runtime.on?.("RUNTIME_DISPOSED", this.dispose);
+  		let unregisterFixed = () => {};
+  		try {
+  			unregisterFixed = registerFixedInputEditors(scratch, fixedInputEditorDefinitions);
+  			this.unregisterFixedInputEditors = unregisterFixed;
+  			this.runtime.on?.("PROJECT_LOADED", this.clearOnProjectLoad);
+  			this.runtime.on?.("RUNTIME_DISPOSED", this.dispose);
+  		} catch (error) {
+  			this.runtime.off?.("PROJECT_LOADED", this.clearOnProjectLoad);
+  			this.runtime.off?.("RUNTIME_DISPOSED", this.dispose);
+  			unregisterFixed();
+  			this.unregisterSourceEditors();
+  			throw error;
+  		}
   	}
   	getInfo() {
   		return {
