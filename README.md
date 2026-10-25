@@ -1,5 +1,7 @@
 # TurboWarp-Diagnostic-Overlay
 
+[日本語](README.ja.md)
+
 An application-neutral TurboWarp extension that validates structured diagnostics, renders them as
 safe SVG text, and displays them over the stage. It does not depend on a particular application or
 DSL.
