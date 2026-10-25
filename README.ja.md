@@ -2,7 +2,7 @@
 
 <img src="assets/block-icon.svg" alt="" width="48" height="48">
 
-[English](README.md)
+[English](README.md) | 日本語
 
 構造化された診断データを検証し、安全なSVGテキストとして描画して、ステージ上に表示する
 アプリケーション非依存のTurboWarp拡張機能です。特定のアプリケーションやDSLに依存しません。
