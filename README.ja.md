@@ -1,5 +1,7 @@
 # TurboWarp-Diagnostic-Overlay
 
+<img src="assets/block-icon.svg" alt="" width="48" height="48">
+
 [English](README.md)
 
 構造化された診断データを検証し、安全なSVGテキストとして描画して、ステージ上に表示する
