@@ -22,6 +22,7 @@
   },
   "homepage": "https://kubohiroya.github.io/turbowarp-diagnostic-overlay/",
   "files": [
+    "assets/",
     "dist/",
     "docs/",
     "CHANGELOG.md",
