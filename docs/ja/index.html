@@ -73,5 +73,9 @@ controller.show({severity: 'error', code: 'APP001', message: '入力を確認し
       <p><a href="../#block-showDiagnostic">showDiagnosticの固定アンカーとSEVERITY固定フォームの説明</a>：info・warning・error・fatalを選択し、未変更の原文を保持します。CODE/MESSAGEはこのフォームの対象外です。</p>
     </main>
     <footer>TurboWarp-Diagnostic-Overlay · MPL-2.0 · <a href="https://github.com/kubohiroya/turbowarp-diagnostic-overlay/releases/tag/v0.2.0">Release v0.2.0</a></footer>
+  <!-- The shared TurboWarp Plus header. It inserts itself at the top of the
+       page in a shadow root, so it cannot disturb the styles below. -->
+  <script type="module"
+          src="https://kubohiroya.github.io/turbowarp-plus-site-header/dist/auto.js"></script>
   </body>
 </html>
