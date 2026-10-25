@@ -95,7 +95,7 @@
     "react-dom": "18.3.1"
   },
   "dependencies": {
-    "@kubohiroya/turbowarp-extension-data-editor": "^0.2.1"
+    "@kubohiroya/turbowarp-extension-data-editor": "^0.3.3"
   },
   "gitHead": "8f4919707d2c29a02a24ab94d240d46746e6a5ce",
   "x-turbowarp-source": {
