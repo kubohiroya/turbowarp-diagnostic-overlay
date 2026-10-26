@@ -117,9 +117,10 @@ const svg = renderDiagnosticSvg({
 
 ## 開発
 
-Node.js 22.12以降とCorepackを使います。
+Node.js 24以降とCorepackを使います。
 
 ```bash
+npm install --global corepack@latest
 corepack enable
 pnpm install --frozen-lockfile
 pnpm run check

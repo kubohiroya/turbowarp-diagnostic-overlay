@@ -174,9 +174,10 @@ See the [English specification](docs/specification.md) or
 
 ## Development
 
-Use Node.js 22.12 or later with Corepack.
+Use Node.js 24 or later with Corepack.
 
 ```bash
+npm install --global corepack@latest
 corepack enable
 pnpm install --frozen-lockfile
 pnpm run check
