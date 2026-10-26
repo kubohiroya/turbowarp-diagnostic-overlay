@@ -29,13 +29,13 @@ TurboWarp Desktop and allow it to **run without the sandbox**.
 When installing from npm, pin the reviewed version:
 
 ```bash
-pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.5.1
+pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.6.0
 ```
 
 The standalone extension is also available from this version-pinned CDN URL:
 
 ```text
-https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.5.1/dist/diagnostic-overlay.js
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.6.0/dist/diagnostic-overlay.js
 ```
 
 The machine-readable block API manifest is generated from `src/block-definitions.json` during the
@@ -43,7 +43,7 @@ build. Consumers can pin and verify the extension ID, opcodes, block types, argu
 and menu references without evaluating the runtime bundle:
 
 ```text
-https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.5.1/dist/extension-manifest.json
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.6.0/dist/extension-manifest.json
 ```
 
 ## Diagnostic JSON

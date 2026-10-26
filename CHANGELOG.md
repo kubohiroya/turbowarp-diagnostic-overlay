@@ -2,6 +2,17 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.6.0] - 2026-10-26
+
+### Changed
+
+- 共通エディター0.3.4、ビルドプラグイン0.8.0へ追従し、配布物を再生成しました。
+- 既存API・保存形式・既定OFFの機能フラグを維持します。
+
+### Compatibility
+
+- 移行は不要です。問題がある場合は0.5.1へ固定して切り戻せます。
+
 ## [0.5.1] - 2026-10-19
 
 ### Changed
