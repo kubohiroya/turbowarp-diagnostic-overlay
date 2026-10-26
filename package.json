@@ -1,6 +1,6 @@
 {
   "name": "@kubohiroya/turbowarp-diagnostic-overlay",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Render structured diagnostics as safe SVG overlays on the TurboWarp stage.",
   "keywords": [
     "turbowarp",
@@ -84,7 +84,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@kubohiroya/turbowarp-extension-manifest": "^0.3.2",
-    "@kubohiroya/vite-plugin-turbowarp-extension": "^0.6.1",
+    "@kubohiroya/vite-plugin-turbowarp-extension": "^0.8.0",
     "@types/node": "^26.1.2",
     "eslint": "^10.8.0",
     "jsdom": "^30.0.1",
@@ -95,11 +95,11 @@
     "react-dom": "18.3.1"
   },
   "dependencies": {
-    "@kubohiroya/turbowarp-extension-data-editor": "^0.3.3"
+    "@kubohiroya/turbowarp-extension-data-editor": "^0.3.4"
   },
-  "gitHead": "8f4919707d2c29a02a24ab94d240d46746e6a5ce",
+  "gitHead": "5f7880af094d14625680a5d911b09ed356eec6f3",
   "x-turbowarp-source": {
-    "revision": "8f4919707d2c29a02a24ab94d240d46746e6a5ce",
+    "revision": "5f7880af094d14625680a5d911b09ed356eec6f3",
     "revisionRole": "base-commit",
     "sourceState": "local-release-overlay"
   }
