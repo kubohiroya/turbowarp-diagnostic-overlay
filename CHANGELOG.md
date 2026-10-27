@@ -2,6 +2,14 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.7.0] - 2026-10-27
+
+### Changed
+
+- 共通data-editorとmanifest 0.4.0、vite-plugin 0.9.0へ追従し、版・lockfile・配布物・利用例を更新します。
+- 診断オーバーレイのruntime APIと拡張ブロックの契約を維持します。
+- 切り戻しは`@kubohiroya/turbowarp-diagnostic-overlay@0.6.0`への固定です。
+
 ## [0.6.0] - 2026-10-26
 
 ### Changed
