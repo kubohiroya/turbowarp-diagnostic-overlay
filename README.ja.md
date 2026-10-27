@@ -11,6 +11,15 @@
 [English guide](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/)および
 [日本語ガイド](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/ja/)で扱っています。
 
+## 実行できるサンプル
+
+[**TurboWarp Editorでデモを開く**](https://turbowarp.org/editor?project_url=https%3A%2F%2Fkubohiroya.github.io%2Fturbowarp-diagnostic-overlay%2Fsamples%2Fshow-and-clear-diagnostic.sb3) · [SB3をダウンロード](https://kubohiroya.github.io/turbowarp-diagnostic-overlay/samples/show-and-clear-diagnostic.sb3)
+
+**Run without sandbox**を選んで**Allow**し、緑の旗を押します。
+`showDiagnostic`で1件表示し、キー操作で`clearDiagnosticOverlay`、可視状態を確認。サンプルの元データと期待結果は[`samples/README.md`](samples/README.md)に記載しています。
+
+`pnpm run samples:build`でSB3を再生成し、`pnpm run samples:check`で更新漏れと生成処理を確認します。
+
 ## 責務の境界
 
 このpackageが行うのは、診断データの検証、SVGの生成、現在のoverlayの表示・更新・消去です。診断の検出、
