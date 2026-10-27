@@ -1,0 +1,21 @@
+{
+  "baseURL": "https://kubohiroya.github.io/turbowarp-diagnostic-overlay/",
+  "extension": {
+    "id": "kubohiroyadiagnosticoverlay",
+    "bundle": "dist/diagnostic-overlay.js",
+    "unsandboxed": true
+  },
+  "samples": [
+    {
+      "name": "show-and-clear-diagnostic",
+      "title": "Diagnostic Overlay minimal demo",
+      "checks": [
+        {
+          "variable": "visible",
+          "equals": true
+        }
+      ],
+      "instructions": "A DEMO001 warning is visible. Press Space to clear it."
+    }
+  ]
+}
