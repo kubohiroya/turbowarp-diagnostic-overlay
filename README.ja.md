@@ -36,13 +36,13 @@ rendererは外部のSVGやHTMLを受け付けず、入力文字列をすべてXM
 npmから導入する場合は、レビュー済みのversionを固定します。
 
 ```bash
-pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.7.0
+pnpm add --save-exact @kubohiroya/turbowarp-diagnostic-overlay@0.8.0
 ```
 
 standaloneの拡張機能は、version固定の次のCDN URLからも取得できます。
 
 ```text
-https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.7.0/dist/diagnostic-overlay.js
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.8.0/dist/diagnostic-overlay.js
 ```
 
 機械可読なblock API manifestは、ビルド時に`src/block-definitions.json`から生成します。利用側は
@@ -50,7 +50,7 @@ https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.7.0/dist
 検証できます。
 
 ```text
-https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.7.0/dist/extension-manifest.json
+https://cdn.jsdelivr.net/npm/@kubohiroya/turbowarp-diagnostic-overlay@0.8.0/dist/extension-manifest.json
 ```
 
 ## 診断JSON

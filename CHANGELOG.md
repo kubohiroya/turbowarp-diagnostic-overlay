@@ -2,6 +2,16 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.8.0] - 2026-10-29
+
+### Changed
+
+- 製作者情報を name: `Hiroya Kubo`、email: `hiroya@cuc.ac.jp`、url: `https://github.com/kubohiroya` のオブジェクトへ統一。
+- 実行時依存 `@kubohiroya/turbowarp-extension-data-editor` を `^0.4.0` から `^0.5.0` へ更新。
+- ビルド依存 `@kubohiroya/turbowarp-extension-manifest` を `^0.4.0` から `^0.5.0` へ更新。
+- ビルド依存 `@kubohiroya/vite-plugin-turbowarp-extension` を `^0.9.0` から `^0.10.0` へ更新。
+- ロールバック: `@kubohiroya/turbowarp-diagnostic-overlay@0.7.0` を固定して利用する。
+
 ## [0.7.0] - 2026-10-27
 
 ### Changed
