@@ -2,6 +2,13 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.9.0] - 2026-11-09
+
+### Changed
+
+- 実行時依存 `@kubohiroya/turbowarp-extension-data-editor` を `^0.5.0` から `^0.8.1` へ更新。
+- ビルド依存 `@kubohiroya/vite-plugin-turbowarp-extension` を `^0.10.0` から `^0.11.0` へ更新。
+
 ## [0.8.0] - 2026-10-29
 
 ### Changed
