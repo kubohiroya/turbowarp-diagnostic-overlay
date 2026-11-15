@@ -24,7 +24,10 @@ export declare class DiagnosticOverlayExtension {
     lastDiagnosticJson(): string;
     /** Final disposal by the owner: nothing registers again after it. */
     readonly dispose: () => void;
-    /** Every project load disposes the runtime; only the editor registrations come back after it. */
+    /**
+     * Every project load disposes the runtime; only the editor registrations come back after it.
+     * The stage overlay stays for the next project, so only the current diagnostic is cleared.
+     */
     private readonly handleRuntimeDisposed;
     private readonly handleProjectLoaded;
     private unregisterEditors;
