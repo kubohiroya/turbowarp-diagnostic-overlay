@@ -2,6 +2,13 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.9.1] - 2026-11-15
+
+### Fixed
+
+- 別の作品を開いたあと（`RUNTIME_DISPOSED` のあと）も、ブロックの編集ダイアログを開けるようにした。外した登録を次の `PROJECT_LOADED` で登録し直す (#37)。
+- 別の作品を開いたあとも、診断のオーバーレイを表示できるようにした。`RUNTIME_DISPOSED` では表示中の診断を消すだけにし、オーバーレイ用ホストの破棄は持ち主が `dispose()` を呼んだときに限る (#38)。
+
 ## [0.9.0] - 2026-11-09
 
 ### Changed
