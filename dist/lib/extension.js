@@ -90,11 +90,15 @@ export class DiagnosticOverlayExtension {
         this.unregisterEditors();
         this.disposeController();
     };
-    /** Every project load disposes the runtime; only the editor registrations come back after it. */
+    /**
+     * Every project load disposes the runtime; only the editor registrations come back after it.
+     * The stage overlay stays for the next project, so only the current diagnostic is cleared.
+     */
     handleRuntimeDisposed = () => {
         this.unregisterEditors();
         this.editorsReleased = true;
-        this.disposeController();
+        if (!this.controllerDisposed)
+            this.controller.clear();
     };
     handleProjectLoaded = () => {
         if (this.editorsReleased) {
