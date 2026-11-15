@@ -6,8 +6,14 @@ export declare class DiagnosticOverlayExtension {
     private readonly controller;
     private readonly runtime;
     private disposed;
-    private readonly unregisterSourceEditors;
-    private readonly unregisterFixedInputEditors;
+    private controllerDisposed;
+    private unregisterSourceEditors;
+    private unregisterFixedInputEditors;
+    /**
+     * Loading a project disposes the runtime, which releases the editor registrations, but the
+     * extension stays loaded for the next project. Register them again once that project has loaded.
+     */
+    private editorsReleased;
     constructor(scratch: ScratchApi, controller: DiagnosticOverlayController);
     getInfo(): Record<string, unknown>;
     showDiagnostic(args: BlockArguments): void;
@@ -16,8 +22,13 @@ export declare class DiagnosticOverlayExtension {
     diagnosticOverlayVisible(): boolean;
     diagnosticSvg(args: BlockArguments): string;
     lastDiagnosticJson(): string;
+    /** Final disposal by the owner: nothing registers again after it. */
     readonly dispose: () => void;
-    private readonly clearOnProjectLoad;
+    /** Every project load disposes the runtime; only the editor registrations come back after it. */
+    private readonly handleRuntimeDisposed;
+    private readonly handleProjectLoaded;
+    private unregisterEditors;
+    private disposeController;
     private toScratchBlock;
     private string;
     private severity;

@@ -53,14 +53,17 @@ describe('DiagnosticOverlayExtension', () => {
     expect(extension.diagnosticOverlayVisible()).toBe(false);
   });
 
-  it('clears on project replacement and releases listeners on runtime disposal', () => {
+  it('clears on project replacement and releases listeners on final disposal', () => {
     const {extension, host, listeners, off} = setup();
     extension.showDiagnostic({SEVERITY: 'error', CODE: 'E1', MESSAGE: 'Visible'});
     listeners.get('PROJECT_LOADED')?.();
     expect(host.visible).toBe(false);
 
+    // A project load disposes the runtime but keeps the extension for the next project.
     listeners.get('RUNTIME_DISPOSED')?.();
     expect(host.disposed).toBe(true);
+    expect(off).not.toHaveBeenCalled();
+    extension.dispose();
     expect(off).toHaveBeenCalledTimes(2);
     extension.dispose();
     expect(off).toHaveBeenCalledTimes(2);

@@ -199,3 +199,26 @@ it('keeps the docsURI landing-page block anchor linked to generated fixed-form h
   expect(readFileSync('docs/schemas/block-editor-fixed-inputs.schema.json', 'utf8'))
     .toBe(readFileSync('schemas/block-editor-fixed-inputs.schema.json', 'utf8'));
 });
+describe('project reload', () => {
+  it('registers the editors again for each project the extension stays loaded for', () => {
+    // Every project load disposes the runtime, which releases the registrations, but keeps the extension loaded.
+    const sourceRemove = vi.fn();
+    const f = diagnosticOwner({sourceRemove});
+    const emit = (event: string) => {for (const callback of [...f.listeners.get(event) ?? []]) callback();};
+    expect(f.registered).toHaveLength(fixedInputEditorDefinitions.length);
+    emit('RUNTIME_DISPOSED');
+    expect(f.removals).toHaveBeenCalledTimes(fixedInputEditorDefinitions.length);expect(sourceRemove).toHaveBeenCalledTimes(1);
+    emit('PROJECT_LOADED');
+    expect(f.registered).toHaveLength(fixedInputEditorDefinitions.length * 2);
+    expect(f.removals).toHaveBeenCalledTimes(fixedInputEditorDefinitions.length);expect(sourceRemove).toHaveBeenCalledTimes(1);
+    emit('PROJECT_LOADED');
+    expect(f.registered).toHaveLength(fixedInputEditorDefinitions.length * 2);
+    emit('RUNTIME_DISPOSED');emit('PROJECT_LOADED');
+    expect(f.registered).toHaveLength(fixedInputEditorDefinitions.length * 3);expect(sourceRemove).toHaveBeenCalledTimes(2);
+    f.extension.dispose();
+    expect(f.removals).toHaveBeenCalledTimes(fixedInputEditorDefinitions.length * 3);expect(sourceRemove).toHaveBeenCalledTimes(3);
+    emit('RUNTIME_DISPOSED');emit('PROJECT_LOADED');
+    expect(f.registered).toHaveLength(fixedInputEditorDefinitions.length * 3);
+    for (const listeners of f.listeners.values()) expect(listeners.size).toBe(0);
+  });
+});
