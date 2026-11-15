@@ -61,12 +61,39 @@ describe('DiagnosticOverlayExtension', () => {
 
     // A project load disposes the runtime but keeps the extension for the next project.
     listeners.get('RUNTIME_DISPOSED')?.();
-    expect(host.disposed).toBe(true);
+    expect(host.disposed).toBe(false);
     expect(off).not.toHaveBeenCalled();
     extension.dispose();
+    expect(host.disposed).toBe(true);
     expect(off).toHaveBeenCalledTimes(2);
     extension.dispose();
     expect(off).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps the stage overlay usable for the next project after the runtime is disposed', () => {
+    const {scratch, listeners} = createScratch();
+    const canvas = scratch.vm.runtime.renderer.canvas;
+    const parent = document.createElement('div');
+    parent.append(canvas);
+    document.body.append(parent);
+    const {extension} = createDiagnosticOverlayComposition(scratch);
+    extension.showDiagnostic({SEVERITY: 'error', CODE: 'E1', MESSAGE: 'Previous project'});
+
+    // vm.loadProject disposes the runtime, then loads the next project.
+    listeners.get('RUNTIME_DISPOSED')?.();
+    expect(extension.diagnosticOverlayVisible()).toBe(false);
+    expect(extension.lastDiagnosticJson()).toBe('');
+    listeners.get('PROJECT_LOADED')?.();
+
+    expect(() => extension.showDiagnostic({SEVERITY: 'info', CODE: 'I1', MESSAGE: 'Next project'})).not.toThrow();
+    expect(extension.diagnosticOverlayVisible()).toBe(true);
+    const overlay = parent.querySelector('[data-turbowarp-diagnostic-overlay]');
+    expect(overlay?.textContent).toContain('Next project');
+    expect(overlay?.textContent).not.toContain('Previous project');
+
+    extension.dispose();
+    expect(parent.querySelector('[data-turbowarp-diagnostic-overlay]')).toBeNull();
+    parent.remove();
   });
 
   it('rejects unsupported severities', () => {
