@@ -9655,19 +9655,55 @@ var DiagnosticOverlayExtension = class {
 		_defineProperty(this, "controller", void 0);
 		_defineProperty(this, "runtime", void 0);
 		_defineProperty(this, "disposed", false);
+		_defineProperty(this, "controllerDisposed", false);
 		_defineProperty(this, "unregisterSourceEditors", void 0);
 		_defineProperty(this, "unregisterFixedInputEditors", void 0);
-		_defineProperty(this, "dispose", () => {
-			if (this.disposed) return;
-			this.disposed = true;
-			this.unregisterFixedInputEditors();
-			this.unregisterSourceEditors();
-			this.runtime.off?.("PROJECT_LOADED", this.clearOnProjectLoad);
-			this.runtime.off?.("RUNTIME_DISPOSED", this.dispose);
-			this.controller.dispose();
-		});
-		_defineProperty(this, "clearOnProjectLoad", () => {
-			this.controller.clear();
+		_defineProperty(
+			this,
+			/**
+			* Loading a project disposes the runtime, which releases the editor registrations, but the
+			* extension stays loaded for the next project. Register them again once that project has loaded.
+			*/
+			"editorsReleased",
+			false
+		);
+		_defineProperty(
+			this,
+			/** Final disposal by the owner: nothing registers again after it. */
+			"dispose",
+			() => {
+				if (this.disposed) return;
+				this.disposed = true;
+				this.runtime.off?.("PROJECT_LOADED", this.handleProjectLoaded);
+				this.runtime.off?.("RUNTIME_DISPOSED", this.handleRuntimeDisposed);
+				this.editorsReleased = false;
+				this.unregisterEditors();
+				this.disposeController();
+			}
+		);
+		_defineProperty(
+			this,
+			/** Every project load disposes the runtime; only the editor registrations come back after it. */
+			"handleRuntimeDisposed",
+			() => {
+				this.unregisterEditors();
+				this.editorsReleased = true;
+				this.disposeController();
+			}
+		);
+		_defineProperty(this, "handleProjectLoaded", () => {
+			if (this.editorsReleased) {
+				this.editorsReleased = false;
+				this.unregisterSourceEditors = registerSourceEditors(this.scratch, sourceEditorDefinitions);
+				try {
+					this.unregisterFixedInputEditors = registerFixedInputEditors(this.scratch, fixedInputEditorDefinitions);
+				} catch (error) {
+					this.unregisterEditors();
+					this.editorsReleased = true;
+					throw error;
+				}
+			}
+			if (!this.controllerDisposed) this.controller.clear();
 		});
 		this.scratch = scratch;
 		this.controller = controller;
@@ -9677,11 +9713,11 @@ var DiagnosticOverlayExtension = class {
 		try {
 			unregisterFixed = registerFixedInputEditors(scratch, fixedInputEditorDefinitions);
 			this.unregisterFixedInputEditors = unregisterFixed;
-			this.runtime.on?.("PROJECT_LOADED", this.clearOnProjectLoad);
-			this.runtime.on?.("RUNTIME_DISPOSED", this.dispose);
+			this.runtime.on?.("PROJECT_LOADED", this.handleProjectLoaded);
+			this.runtime.on?.("RUNTIME_DISPOSED", this.handleRuntimeDisposed);
 		} catch (error) {
-			this.runtime.off?.("PROJECT_LOADED", this.clearOnProjectLoad);
-			this.runtime.off?.("RUNTIME_DISPOSED", this.dispose);
+			this.runtime.off?.("PROJECT_LOADED", this.handleProjectLoaded);
+			this.runtime.off?.("RUNTIME_DISPOSED", this.handleRuntimeDisposed);
 			unregisterFixed();
 			this.unregisterSourceEditors();
 			throw error;
@@ -9730,6 +9766,15 @@ var DiagnosticOverlayExtension = class {
 	}
 	lastDiagnosticJson() {
 		return this.controller.lastDiagnosticJson();
+	}
+	unregisterEditors() {
+		this.unregisterFixedInputEditors();
+		this.unregisterSourceEditors();
+	}
+	disposeController() {
+		if (this.controllerDisposed) return;
+		this.controllerDisposed = true;
+		this.controller.dispose();
 	}
 	toScratchBlock(block) {
 		return {

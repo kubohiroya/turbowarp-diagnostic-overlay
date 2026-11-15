@@ -10,8 +10,14 @@ export class DiagnosticOverlayExtension {
     controller;
     runtime;
     disposed = false;
+    controllerDisposed = false;
     unregisterSourceEditors;
     unregisterFixedInputEditors;
+    /**
+     * Loading a project disposes the runtime, which releases the editor registrations, but the
+     * extension stays loaded for the next project. Register them again once that project has loaded.
+     */
+    editorsReleased = false;
     constructor(scratch, controller) {
         this.scratch = scratch;
         this.controller = controller;
@@ -21,12 +27,12 @@ export class DiagnosticOverlayExtension {
         try {
             unregisterFixed = registerFixedInputEditors(scratch, fixedInputEditorDefinitions);
             this.unregisterFixedInputEditors = unregisterFixed;
-            this.runtime.on?.('PROJECT_LOADED', this.clearOnProjectLoad);
-            this.runtime.on?.('RUNTIME_DISPOSED', this.dispose);
+            this.runtime.on?.('PROJECT_LOADED', this.handleProjectLoaded);
+            this.runtime.on?.('RUNTIME_DISPOSED', this.handleRuntimeDisposed);
         }
         catch (error) {
-            this.runtime.off?.('PROJECT_LOADED', this.clearOnProjectLoad);
-            this.runtime.off?.('RUNTIME_DISPOSED', this.dispose);
+            this.runtime.off?.('PROJECT_LOADED', this.handleProjectLoaded);
+            this.runtime.off?.('RUNTIME_DISPOSED', this.handleRuntimeDisposed);
             unregisterFixed();
             this.unregisterSourceEditors();
             throw error;
@@ -73,19 +79,49 @@ export class DiagnosticOverlayExtension {
     lastDiagnosticJson() {
         return this.controller.lastDiagnosticJson();
     }
+    /** Final disposal by the owner: nothing registers again after it. */
     dispose = () => {
         if (this.disposed)
             return;
         this.disposed = true;
+        this.runtime.off?.('PROJECT_LOADED', this.handleProjectLoaded);
+        this.runtime.off?.('RUNTIME_DISPOSED', this.handleRuntimeDisposed);
+        this.editorsReleased = false;
+        this.unregisterEditors();
+        this.disposeController();
+    };
+    /** Every project load disposes the runtime; only the editor registrations come back after it. */
+    handleRuntimeDisposed = () => {
+        this.unregisterEditors();
+        this.editorsReleased = true;
+        this.disposeController();
+    };
+    handleProjectLoaded = () => {
+        if (this.editorsReleased) {
+            this.editorsReleased = false;
+            this.unregisterSourceEditors = registerSourceEditors(this.scratch, sourceEditorDefinitions);
+            try {
+                this.unregisterFixedInputEditors = registerFixedInputEditors(this.scratch, fixedInputEditorDefinitions);
+            }
+            catch (error) {
+                this.unregisterEditors();
+                this.editorsReleased = true;
+                throw error;
+            }
+        }
+        if (!this.controllerDisposed)
+            this.controller.clear();
+    };
+    unregisterEditors() {
         this.unregisterFixedInputEditors();
         this.unregisterSourceEditors();
-        this.runtime.off?.('PROJECT_LOADED', this.clearOnProjectLoad);
-        this.runtime.off?.('RUNTIME_DISPOSED', this.dispose);
+    }
+    disposeController() {
+        if (this.controllerDisposed)
+            return;
+        this.controllerDisposed = true;
         this.controller.dispose();
-    };
-    clearOnProjectLoad = () => {
-        this.controller.clear();
-    };
+    }
     toScratchBlock(block) {
         return {
             opcode: block.opcode,
