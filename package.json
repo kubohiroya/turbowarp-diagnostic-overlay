@@ -1,6 +1,6 @@
 {
   "name": "@kubohiroya/turbowarp-diagnostic-overlay",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Render structured diagnostics as safe SVG overlays on the TurboWarp stage.",
   "keywords": [
     "turbowarp",
@@ -109,5 +109,11 @@
     "revision": "f5d15bcc0d3b23517359a789b644599dfba4397f",
     "revisionRole": "base-commit",
     "sourceState": "local-release-overlay"
+  },
+  "turbowarpExtension": {
+    "resourceDeclaration": {
+      "schemaVersion": 1,
+      "resources": []
+    }
   }
 }
