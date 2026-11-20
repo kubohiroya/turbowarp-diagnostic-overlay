@@ -2,6 +2,10 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.10.1] - 2026-11-21
+
+- パッケージにリソース利用宣言を追加。切り戻しは `@kubohiroya/turbowarp-diagnostic-overlay@0.10.0` に固定。
+
 ## [0.10.0] - 2026-11-20
 
 ### Changed
