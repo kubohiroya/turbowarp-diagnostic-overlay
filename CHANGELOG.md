@@ -2,6 +2,13 @@
 
 このプロジェクトの注目すべき変更を記録します。形式は[Keep a Changelog](https://keepachangelog.com/ja/1.1.0/)に基づき、[Semantic Versioning](https://semver.org/lang/ja/)に従います。
 
+## [0.11.0] - 2026-11-22
+
+### Changed
+
+- 実行時依存 `@kubohiroya/turbowarp-extension-data-editor` を `^0.11.0` から `^0.11.2` へ更新。
+- ビルド依存 `@kubohiroya/turbowarp-extension-manifest` を `^0.5.0` から `^0.6.0` へ更新。
+
 ## [0.10.1] - 2026-11-21
 
 - パッケージにリソース利用宣言を追加。切り戻しは `@kubohiroya/turbowarp-diagnostic-overlay@0.10.0` に固定。
